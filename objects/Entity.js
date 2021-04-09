@@ -12,11 +12,6 @@ class Entity{
     }
     update(){
     }
-    drawImage(){
-        setPixeleated();
-        this.screenCords = tilemap.toScreenSpace(this.position.x, this.position.y);
-        ctx.drawImage(this.asset, this.screenCords.x-(this.size.x/2), this.screenCords.y-(this.size.y/2), this.size.x, this.size.y);
-    }
     loadImage(src){
         this.asset.src = src;
     }

@@ -1,5 +1,6 @@
 var ctx = canv.getContext('2d');
 var tilemap = null;
+var deltaTime = 0;
 class Vector {
     constructor(x, y) {
       if (x) {
@@ -25,6 +26,14 @@ class Vector {
     multiply(num){
       return new Vector(this.x*num, this.y*num)
     }
+    subtractUnit(num){
+      this.x-=num;
+      this.y-=num;
+    }
+    add(vec){
+      this.x+=vec.x;
+      this.y+=vec.y;
+    }
 }
 function setPixeleated(){
     ctx.mozImageSmoothingEnabled = false;
@@ -42,8 +51,17 @@ function dotProduct(v1, v2)
   return v1.x * v2.x + v1.y * v2.y;
 }
 function random(range){
-  return (Math.random()*range*2)-range
+  return (Math.random()*range*2)-range;
 }
 function randomVector(){
   return new Vector(random(1), random(1));
+}
+function drawImage(asset, position, size, p, s){
+  setPixeleated();
+  this.screenCords = tilemap.toScreenSpace(position.x, position.y);
+  if(s||p){
+      ctx.drawImage(asset, p.x, p.y, s.x, s.y, this.screenCords.x-(size.x/2), this.screenCords.y-(size.y/2), size.x, size.y);
+  }else{
+      ctx.drawImage(asset, this.screenCords.x-(size.x/2), this.screenCords.y-(size.y/2), size.x, size.y);
+  }
 }

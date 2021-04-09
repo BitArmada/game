@@ -2,12 +2,12 @@ var canv = document.getElementById("canv");
 var ctx = canv.getContext("2d");
 canv.width = window.innerWidth;
 canv.height = window.innerHeight;
-var deltaTime = 0;
 var performance = 0;
 var disp = document.getElementById("performance");
 
 import {Tilemap} from "./objects/Tilemap.js";
 import {Player} from "./objects/player.js";
+import { ParticleEffect } from "./objects/Entitys/Particle Effect.js";
 //import {ParticleSystem} from "./objects/Components/Particle System.js";
 
 class testEntity extends Entity{
@@ -15,7 +15,7 @@ class testEntity extends Entity{
         this.loadImage("./assets/test entity.png");
     }
     update(){
-        this.drawImage();
+        drawImage(this.asset, this.position, this.size);
     }
 }
 
@@ -34,11 +34,12 @@ class Game{
     start(){
         //pollinput
         document.addEventListener("click", this.onClick.bind(this));
-        setInterval(this.update.bind(this), 1000/this.fps)
+        setInterval(this.update.bind(this), 1000/this.fps);
     }
     update(){
         deltaTime = Date.now()-this.time;
-        performance = 1000/deltaTime;
+        deltaTime/=1000;
+        performance = 1/deltaTime;
         this.displayPerfromance();
         this.time = Date.now();
         ctx.fillStyle = "black";
