@@ -7,12 +7,15 @@ var performance = 0;
 var disp = document.getElementById("performance");
 
 import {Tilemap} from "./objects/Tilemap.js";
-import {Entity} from "./objects/Entity.js";
 import {Player} from "./objects/player.js";
+//import {ParticleSystem} from "./objects/Components/Particle System.js";
 
 class testEntity extends Entity{
     start(){
         this.loadImage("./assets/test entity.png");
+    }
+    update(){
+        this.drawImage();
     }
 }
 

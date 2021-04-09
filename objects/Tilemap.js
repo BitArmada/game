@@ -79,7 +79,6 @@ class Tilemap{
             this.loadChunk(nx+1, ny);
             this.loadChunk(nx, ny+1);
             this.loadChunk(nx+1, ny+1);
-            console.log("floor: "+nx+" trunc: "+Math.trunc(this.offsetX/chunkwidth))
         }
         this.chunkpos.x = nx;
         this.chunkpos.y = ny;
@@ -103,10 +102,13 @@ class Tilemap{
         return false;
     }
     toScreenSpace(x, y){
+        return {x: ((x*this.tilewidth)-(this.offsetX*this.tilewidth)), y: ((y*this.tilewidth)-(this.offsetY*this.tilewidth))};
+    }
+    pixelsToScreenSpace(x, y){
         return {x: (x-(this.offsetX*this.tilewidth)), y: (y-(this.offsetY*this.tilewidth))};
     }
     toWorldSpace(x, y){
-        return {x: (x+(this.offsetX*this.tilewidth)), y: (y+(this.offsetY*this.tilewidth))};
+        return {x: ((x/this.tilewidth)+this.offsetX), y: ((y/this.tilewidth)+this.offsetY)};
     }
 }
 class Chunk {

@@ -30,7 +30,7 @@ class Player{
         this.x+=this.velocity.x;
         this.y+=this.velocity.y;
         setPixeleated();
-        this.screenCords = tilemap.toScreenSpace(this.x, this.y);
+        this.screenCords = tilemap.pixelsToScreenSpace(this.x, this.y);
         if(this.dir>0){
             ctx.save();
             ctx.scale(-1, 1);

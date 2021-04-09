@@ -22,7 +22,7 @@ class Vector {
     divide(scalar) {
       return new Vector(this.x / scalar, this.y / scalar);
     }
-    mult(num){
+    multiply(num){
       return new Vector(this.x*num, this.y*num)
     }
 }
@@ -40,4 +40,10 @@ function fract (val){
 function dotProduct(v1, v2)
 {
   return v1.x * v2.x + v1.y * v2.y;
+}
+function random(range){
+  return (Math.random()*range*2)-range
+}
+function randomVector(){
+  return new Vector(random(1), random(1));
 }
