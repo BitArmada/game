@@ -1,11 +1,15 @@
 var ctx = canv.getContext('2d');
 var biomerarity = 1.95;
+// width of world you wil reach ocean if you get to the end
 var chunkwidth = 64;
+var worldWidth = 1000;
+var worldHeight = 1000;
+var oceanwidth = 10;
 
 class Tilemap{
     constructor(player){
-        this.width = 100;
-        this.height = 100;
+        this.width = worldWidth;
+        this.height = worldHeight;
         this.chunks = []//Array.from(Array(this.width), () => new Array(this.height));
         this.loadedChunks = [];
         this.chunkpos = new Vector(-100,-100);
@@ -20,31 +24,20 @@ class Tilemap{
         noise.seed(Math.random());
         //this.loadMap();
     }
-    /*loadMap(){
-        noise.seed(Math.random());
-        for(var y = 0; y < this.height; y++){
-            this.map.push([]);
-            for(var x = 0; x < this.width; x++){
-                var height = heightGen(x, y);
-                var biome = biomeGen(x, y);
-                this.map[y].push(ToTile(height, biome));
-            }
-        }
-    }*/
     draw(){
         //finding visible tiles
         this.visibletilesY = canv.height/this.tilewidth;
         this.visibletilesX = canv.width/this.tilewidth;
         
         //finding visible tiles and offset
-        this.offsetX = (this.camera.x/this.tilewidth) - (Math.floor(this.visibletilesX) / 2);
-        this.offsetY = (this.camera.y/this.tilewidth) - (Math.floor(this.visibletilesY) / 2);
+        this.offsetX = (this.camera.position.x) - (Math.floor(this.visibletilesX) / 2);
+        this.offsetY = (this.camera.position.y) - (Math.floor(this.visibletilesY) / 2);
         
         //handle camera off screen
-        if(this.offsetX < -this.width ){this.offsetX = -this.width ;}
-        if(this.offsetY < -this.height){this.offsetY = -this.height;}
-        if(this.offsetX > this.width - this.visibletilesX){ this.offsetX = this.width - this.visibletilesX};
-        if(this.offsetY > this.height - this.visibletilesY){ this.offsetY = this.height - this.visibletilesY};
+        if(this.offsetX < -this.width*chunkwidth ){this.offsetX = -this.width*chunkwidth ;}
+        if(this.offsetY < -this.height*chunkwidth){this.offsetY = -this.height*chunkwidth;}
+        if(this.offsetX > this.width*chunkwidth - this.visibletilesX){ this.offsetX = this.width*chunkwidth - this.visibletilesX};
+        if(this.offsetY > this.height*chunkwidth - this.visibletilesY){ this.offsetY = this.height*chunkwidth - this.visibletilesY};
         
         this.tileoffx = (this.offsetX - Math.floor(this.offsetX))*this.tilewidth;
         this.tileoffy = (this.offsetY - Math.floor(this.offsetY))*this.tilewidth;
@@ -131,7 +124,11 @@ class Chunk {
             for(var x = 0; x < this.width; x++){
                 var height = heightGen(this.offset.x+x, this.offset.y+y);
                 var biome = biomeGen(this.offset.x+x, this.offset.y+y);
-                this.map[y].push(ToTile(height, biome));
+                if(oceanGen(this.offset.x+x, this.offset.y+y,(worldWidth*chunkwidth), (worldHeight*chunkwidth))){
+                    this.map[y].push(new Tile(Tiles.water));
+                }else{
+                    this.map[y].push(ToTile(height, biome));
+                }
             }
         }
     }
@@ -179,6 +176,16 @@ function ToTile(height, biome){
 function biomeGen(x, y){
     var scale = 50;
     return (noise.voronoi((x / scale)+noise.perlin2(x/scale, y/scale)/2, (y / scale)+noise.simplex2(x/scale, y/scale)/2))+1;
+}
+function oceanGen(sx, sy, depthx, depthy){
+    var scale = 5;
+    var x = sx+noise.perlin2(sx/scale, sy/scale)*5;
+    var y = sy+noise.perlin2(sx/scale, sy/scale)*5;
+    if(x<-depthx+oceanwidth){return true}
+    if(x>depthx-oceanwidth){return true}
+    if(y<-depthy+oceanwidth){return true}
+    if(y>depthy-oceanwidth){return true}
+    return false;
 }
 function heightGen(x, y){
     return (noise.perlin2(x / 10,y / 10))+1;

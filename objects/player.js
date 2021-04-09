@@ -1,15 +1,14 @@
 var ctx = canv.getContext('2d');
 class Player{
     constructor(x, y){
-        this.x = x;
-        this.y = y;
+        this.position = new Vector(x, y);
         this.velocity = new Vector();
         this.size = new Vector(100,100);
-        this.speed = 5;
+        this.speed = 0.1;
         this.asset = new Image();
         this.asset.src = "./assets/character.png";
-        this.screenCords;
         this.direction;
+        this.screenCords;
     }
     start(){}
     update(){
@@ -27,10 +26,10 @@ class Player{
             this.velocity.x = this.speed;
             this.dir = 1;
         }
-        this.x+=this.velocity.x;
-        this.y+=this.velocity.y;
+        this.position.x+=this.velocity.x;
+        this.position.y+=this.velocity.y;
         setPixeleated();
-        this.screenCords = tilemap.pixelsToScreenSpace(this.x, this.y);
+        this.screenCords = tilemap.toScreenSpace(this.position.x, this.position.y);
         if(this.dir>0){
             ctx.save();
             ctx.scale(-1, 1);

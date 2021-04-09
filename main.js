@@ -61,7 +61,7 @@ class Game{
     displayPerfromance(){
         disp.innerHTML = "fps: "+performance
         +"\nworld seed: "+currentSeed
-        +"\ncurrentChunk: "+Math.floor(this.player.x/(64*this.tilemap.tilewidth))+", "+Math.floor(this.player.y/(64*this.tilemap.tilewidth));
+        +"\ncurrentChunk: "+Math.floor(this.player.position.x/(64))+", "+Math.floor(this.player.position.y/(64));
     }
 }
 
