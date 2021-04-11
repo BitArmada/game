@@ -3,8 +3,9 @@ class Player{
     constructor(x, y){
         this.position = new Vector(x, y);
         this.velocity = new Vector();
+        this.acceleration = 1;
         this.size = new Vector(100,100);
-        this.speed = 0.1;
+        this.maxSpeed = 0.15;
         this.asset = new Image();
         this.asset.src = "./assets/character.png";
         this.direction;
@@ -12,19 +13,53 @@ class Player{
     }
     start(){}
     update(){
-        this.velocity.x = 0;
-        this.velocity.y = 0;
         if(up){
-            this.velocity.y = -this.speed;
+            this.velocity.y -= this.acceleration*deltaTime;
+            if(this.velocity.y < -this.maxSpeed){
+                this.velocity.y = -this.maxSpeed;
+            }
         }else if(down){
-            this.velocity.y = this.speed;
+            this.velocity.y += this.acceleration*deltaTime;
+            if(this.velocity.y > this.maxSpeed){
+                this.velocity.y = this.maxSpeed;
+            }
+        }else{
+            if(this.velocity.y < 0){
+                this.velocity.y += this.acceleration*deltaTime;
+                if(this.velocity.y >= 0){
+                    this.velocity.y = 0;
+                }
+            }else{
+                this.velocity.y -= this.acceleration*deltaTime;
+                if(this.velocity.y <= 0){
+                    this.velocity.y = 0;
+                }
+            }
         }
         if(left){
-            this.velocity.x = -this.speed;
+            this.velocity.x -= this.acceleration*deltaTime;
+            if(this.velocity.x < -this.maxSpeed){
+                this.velocity.x = -this.maxSpeed;
+            }
             this.dir = -1;
         }else if(right){
-            this.velocity.x = this.speed;
+            this.velocity.x += this.acceleration*deltaTime;
+            if(this.velocity.x > this.maxSpeed){
+                this.velocity.x = this.maxSpeed;
+            }
             this.dir = 1;
+        }else{
+            if(this.velocity.x < 0){
+                this.velocity.x += this.acceleration*deltaTime;
+                if(this.velocity.x >= 0){
+                    this.velocity.x = 0;
+                }
+            }else{
+                this.velocity.x -= this.acceleration*deltaTime;
+                if(this.velocity.x <= 0){
+                    this.velocity.x = 0;
+                }
+            }
         }
         this.position.x+=this.velocity.x;
         this.position.y+=this.velocity.y;

@@ -10,6 +10,7 @@ var Tiles = {
     ice: new Image(),
     magma:  new Image(),
     cardinal: new Image(),
+    testTile: new Image(),
 }
 Tiles.grass.src = "assets/Tiles/grass.png";
 Tiles.water.src = "assets/Tiles/water mine.png";
@@ -20,3 +21,4 @@ Tiles.ice.src = "assets/Tiles/ice.png";
 Tiles.lava.src = "assets/Tiles/lava.png";
 Tiles.cardinal.src = "assets/Tiles/cardinalstone.png";
 Tiles.cardinalGrass.src = "assets/Tiles/cardinal grass.png";
+Tiles.testTile.src = "assets/Tiles/cardinal.png";

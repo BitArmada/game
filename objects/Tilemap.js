@@ -43,6 +43,7 @@ class Tilemap{
         this.tileoffy = (this.offsetY - Math.floor(this.offsetY))*this.tilewidth;
 
         this.calculateChunkPos();
+        //console.time("render");
         for(var x = 0; x < this.visibletilesX+1; x++){
             for(var y = 0; y < this.visibletilesY+1; y++){
                 //loop through chunks
@@ -52,10 +53,13 @@ class Tilemap{
                     if(tile.id != -1){break;}
                 }
                 if(tile.id != -1){
-                    ctx.drawImage(tile.asset, (x*this.tilewidth)-this.tileoffx, (y*this.tilewidth)-this.tileoffy, this.tilewidth, this.tilewidth);
+                    //ctx.drawImage(tile.asset, (x*this.tilewidth)-this.tileoffx, (y*this.tilewidth)-this.tileoffy, this.tilewidth, this.tilewidth);
+                    tile.render((x*this.tilewidth)-this.tileoffx, (y*this.tilewidth)-this.tileoffy, this.tilewidth, this.tilewidth);
                 }
             }
         }
+        //console.timeLog("render");
+        //console.timeEnd("render");
         
         for(var i = 0; i < this.loadedChunks.length; i++){
             this.loadedChunks[i].update();
@@ -125,8 +129,13 @@ class Chunk {
                 var height = heightGen(this.offset.x+x, this.offset.y+y);
                 var biome = biomeGen(this.offset.x+x, this.offset.y+y);
                 if(oceanGen(this.offset.x+x, this.offset.y+y,(worldWidth*chunkwidth), (worldHeight*chunkwidth))){
-                    this.map[y].push(new Tile(Tiles.water));
+                    this.map[y].push(new Tile(Tiles.water, 2));
                 }else{
+                    var tile = ToTile(height, biome);
+                    //send block update to tile above this tile if this tile is water
+                    if(tile.id == 2&&y-1>=0){
+                        this.map[y-1][x].tileUpdate(0,1, tile);
+                    }
                     this.map[y].push(ToTile(height, biome));
                 }
             }
@@ -153,23 +162,23 @@ class Chunk {
 function ToTile(height, biome){
     if(biome>1.5&&biome<biomerarity){
         if(height>1.5){
-            return new Tile(Tiles.cardinal);
+            return new Tile(Tiles.cardinal,1);
         }else if(height>0.8){
-            return new Tile(Tiles.cardinalGrass);
+            return new Tile(Tiles.testTile,1);
         }else{
-            return new Tile(Tiles.lava);
+            return new Tile(Tiles.lava,2);
         }
     }else if(biome>biomerarity){
         if(height>0.8){
-            return new Tile(Tiles.snow);
+            return new Tile(Tiles.snow,1);
         }else{
-            return new Tile(Tiles.ice);
+            return new Tile(Tiles.ice,1);
         }
     }else{
         if(height>0.8){
-            return new Tile(Tiles.grass);
+            return new Tile(Tiles.grass,1);
         }else{
-            return new Tile(Tiles.water);
+            return new Tile(Tiles.water,2);
         }
     }
 }
@@ -191,11 +200,19 @@ function heightGen(x, y){
     return (noise.perlin2(x / 10,y / 10))+1;
 }
 class Tile{
-    constructor(asset,){
-        this.id = 1;
+    constructor(asset, id){
+        this.id = id;
+        this.form = 0;
         this.asset = asset;
     }
-    render(){
+    render(x, y, width, height){
+        ctx.drawImage(this.asset, (this.form)*16, 0, 16,16, x, y, width, height);
+    }
+    tileUpdate(x, y, tile){
+        //x and y are relative to this tile
+        if(this.id != 2){
+            this.form = 1;
+        }
     }
 }
 function round(val){
