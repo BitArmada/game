@@ -45,7 +45,7 @@ class Tilemap{
         this.calculateChunkPos();
         //console.time("render");
         for(var x = 0; x < this.visibletilesX+1; x++){
-            for(var y = 0; y < this.visibletilesY+1; y++){
+            for(var y = 0; y < this.visibletilesY+1; y++){ 
                 //loop through chunks
                 var tile = {id: -1};
                 for(var i = 0; i < this.loadedChunks.length; i++){
