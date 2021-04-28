@@ -3,7 +3,7 @@ class Player{
     constructor(x, y){
         this.position = new Vector(x, y);
         this.velocity = new Vector();
-        this.acceleration = 1;
+        this.acceleration = 0.7;
         this.size = new Vector(100,100);
         this.maxSpeed = 0.15;
         this.asset = new Image();

@@ -12,7 +12,8 @@ import { ParticleEffect } from "./objects/Entitys/Particle Effect.js";
 
 class testEntity extends Entity{
     start(){
-        this.loadImage("./assets/test entity.png");
+        this.loadImage("./assets/tiles/wall.png");
+        this.size = new Vector(100,100);
     }
     update(){
         drawImage(this.asset, this.position, this.size);

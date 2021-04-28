@@ -133,10 +133,10 @@ class Chunk {
                 }else{
                     var tile = ToTile(height, biome);
                     //send block update to tile above this tile if this tile is water
-                    if(tile.id == 2&&y-1>=0){
-                        this.map[y-1][x].tileUpdate(0,1, tile);
+                    this.map[y].push(tile);
+                    if(tile.id == 2&&y>0){
+                        this.map[y-1][x].tileUpdate(x, y-1, this.map);
                     }
-                    this.map[y].push(ToTile(height, biome));
                 }
             }
         }
@@ -202,16 +202,20 @@ function heightGen(x, y){
 class Tile{
     constructor(asset, id){
         this.id = id;
-        this.form = 0;
+        this.form = new Vector();
         this.asset = asset;
     }
     render(x, y, width, height){
-        ctx.drawImage(this.asset, (this.form)*16, 0, 16,16, x, y, width, height);
+        ctx.drawImage(this.asset, (this.form.x)*16, (this.form.y)*16, 16,16, x, y, width, height);
     }
-    tileUpdate(x, y, tile){
-        //x and y are relative to this tile
-        if(this.id != 2){
-            this.form = 1;
+    tileUpdate(x, y, tiles){
+        if(tiles[y+1][x].id == 2){
+            this.form.x = 1;
+            this.form.y = 1;
+            if(x>0&&tiles[y][x-1].id == 2){
+                this.form.x = 0;
+                this.form.y = 1;
+            }
         }
     }
 }
