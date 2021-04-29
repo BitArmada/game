@@ -20,7 +20,6 @@ class testEntity extends Entity{
     }
 }
 
-
 class Game{
     constructor(){
         this.running = true;

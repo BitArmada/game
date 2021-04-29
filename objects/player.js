@@ -1,4 +1,6 @@
 var ctx = canv.getContext('2d');
+import {ball} from "../items/items.js";
+
 class Player{
     constructor(x, y){
         this.position = new Vector(x, y);
