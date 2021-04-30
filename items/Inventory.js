@@ -1,4 +1,4 @@
-import {ball, rock, stick} from "./items.js";
+import {ball, rock, stick, Pistol} from "./items.js";
 
 class Inventory{
     constructor(){
@@ -20,6 +20,7 @@ class Inventory{
         this.add(new ball());
         this.add(new rock());
         this.add(new stick());
+        this.add(new Pistol());
     }
     add(item){
         var newItemIndex = this.items.length;
@@ -46,7 +47,14 @@ class Inventory{
     createItemElement(){
         var item = document.createElement("DIV");
         item.classList.add("item");
+        item.addEventListener("click", this.itemClick.bind(this));
         return item;
+    }
+    itemClick(event){
+        var elem = event.path[0];
+        this.deSelect(this.itemElements[this.selectedItem]);
+        this.selectedItem = this.itemElements.indexOf(elem);
+        this.select(this.itemElements[this.selectedItem]);
     }
     getSelectedItem(){
         return this.items[this.selectedItem];

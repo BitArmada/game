@@ -26,6 +26,7 @@ class Game{
         this.fps = 60;
         this.Entitys = [];
         this.player = new Player(0,0, this);
+        window.player = this.player;
         this.tilemap = new Tilemap(this.player);
         tilemap = this.tilemap;
         this.start();
@@ -34,13 +35,14 @@ class Game{
     start(){
         //pollinput
         canv.addEventListener("click", this.onClick.bind(this));
+        window.addEventListener('resize', this.onResize());
         setInterval(this.update.bind(this), 1000/this.fps);
     }
     update(){
         deltaTime = Date.now()-this.time;
         deltaTime/=1000;
         performance = 1/deltaTime;
-        //this.displayPerfromance();
+        this.displayPerfromance();
         this.time = Date.now();
         ctx.fillStyle = "black";
         ctx.fillRect(0,0,canv.width,canv.height);
@@ -60,6 +62,13 @@ class Game{
     }
     add(ent){
         this.Entitys.push(ent);
+    }
+    remove(ent){
+        this.Entitys.splice(this.Entitys.indexOf(ent), 1);
+    }
+    onResize(event){
+        canv.width = window.innerWidth;
+        canv.height = window.innerHeight;
     }
     displayPerfromance(){
         disp.innerHTML = "fps: "+performance
