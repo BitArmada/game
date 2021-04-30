@@ -33,7 +33,7 @@ class Game{
     }
     start(){
         //pollinput
-        document.addEventListener("click", this.onClick.bind(this));
+        canv.addEventListener("click", this.onClick.bind(this));
         setInterval(this.update.bind(this), 1000/this.fps);
     }
     update(){
@@ -54,9 +54,9 @@ class Game{
         this.player.update();
     }
     onClick(event){
-        var pos = this.tilemap.toWorldSpace(event.clientX, event.clientY);
-        this.Entitys.push(new testEntity(pos.x, pos.y))
-        this.player.onClick(event.clientX, event.clientY);
+        //var pos = this.tilemap.toWorldSpace(event.clientX, event.clientY);
+        //this.Entitys.push(new testEntity(pos.x, pos.y))
+        this.player.onClick(event.clientX, event.clientY, event);
     }
     displayPerfromance(){
         disp.innerHTML = "fps: "+performance

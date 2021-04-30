@@ -1,10 +1,12 @@
 var ctx = canv.getContext('2d');
-import {ball} from "../items/items.js";
+import {Inventory} from "../items/Inventory.js";
+import {ball, rock} from "../items/items.js";
 
 class Player{
     constructor(x, y){
         this.position = new Vector(x, y);
         this.velocity = new Vector();
+        this.Inventory = new Inventory();
         this.acceleration = 0.7;
         this.size = new Vector(100,100);
         this.maxSpeed = 0.15;
@@ -76,7 +78,8 @@ class Player{
             ctx.drawImage(this.asset, this.screenCords.x-(this.size.x/2), this.screenCords.y-(this.size.y/2), this.size.x, this.size.y);
         }
     }
-    onClick(x, y) {
+    onClick(x, y, event) {
+        this.Inventory.useSelectedItem(event);
     }
 }
 

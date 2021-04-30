@@ -1,7 +1,7 @@
 class Item{
     constructor(){
         this.position = new Vector();
-        this.asset = null;
+        this.asset = new Image();
         this.size = new Vector(50, 50);
     }
     draw(){
@@ -10,7 +10,21 @@ class Item{
 }
 
 class ball extends Item{
-
+    constructor(){
+        super();
+        this.asset.src = "./assets/items/ball.png";
+    }
+    use(){
+        
+    }
 }
 
-export {ball};
+class rock extends Item{
+    constructor(){
+        super();
+        this.asset.src = "./assets/items/rock.png";
+    }
+}
+
+
+export {ball, rock};

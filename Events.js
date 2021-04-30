@@ -1,7 +1,7 @@
 var up = false;
 var down = false;
 var left = false;
-var right = false
+var right = false;
 
 //KEYS
 document.addEventListener("keydown", keyDown);
