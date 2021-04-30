@@ -58,6 +58,17 @@ body{
 .item:hover{
     background-color:#303030;
 }
+.item-selected{
+    border-radius: 10px;
+    padding: 25px;
+    background-color:#365ccf;
+    /*background-image: url("./assets/items/rock.png");*/
+    background-size: 50px 50px;
+    background-repeat: no-repeat;
+}
+.item-selected:hover{
+    background-color:#303030;
+}
 .description {
     display: none;
     position: absolute;

@@ -77,9 +77,16 @@ class Player{
         }else{
             ctx.drawImage(this.asset, this.screenCords.x-(this.size.x/2), this.screenCords.y-(this.size.y/2), this.size.x, this.size.y);
         }
+        this.drawItem();
     }
     onClick(x, y, event) {
         this.Inventory.useSelectedItem(event);
+    }
+    drawItem(){
+        var item = this.Inventory.getSelectedItem();
+        if(item){
+            ctx.drawImage(item.asset, this.screenCords.x-(item.size.x/2)-(this.size.x/9), this.screenCords.y-(item.size.y/2)+(this.size.y/10), item.size.x, item.size.y);
+        }
     }
 }
 

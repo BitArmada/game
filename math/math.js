@@ -65,3 +65,6 @@ function drawImage(asset, position, size, p, s){
       ctx.drawImage(asset, this.screenCords.x-(size.x/2), this.screenCords.y-(size.y/2), size.x, size.y);
   }
 }
+function mod(num, n) {
+  return ((num%n)+n)%n;
+};

@@ -9,6 +9,13 @@ class Inventory{
         this.hotbarElement = document.getElementById('hotbar');
         this.inventoryElement = document.getElementById('inventory');
         this.create();
+
+        //select defualt item
+        this.select(this.itemElements[this.selectedItem]);
+
+        // add event listeners
+        document.addEventListener("wheel", this.onScroll.bind(this));
+
         this.add(new ball());
         this.add(new rock());
     }
@@ -21,9 +28,13 @@ class Inventory{
         this.items.push(item);
     }
     useSelectedItem(event){
-        this.items[this.selectedItem].use(event);
+        var item = this.getSelectedItem();
+        if(item&&typeof item.use == 'function'){
+            item.use();
+        }
     }
     create(){
+        this.hotbarElement.style.gridTemplateColumns = 'repeat('+this.hotBarSize+', auto)';
         for(var i = 0; i < this.hotBarSize; i++){
             var item = this.createItemElement();
             this.hotbarElement.appendChild(item);
@@ -37,6 +48,18 @@ class Inventory{
     }
     getSelectedItem(){
         return this.items[this.selectedItem];
+    }
+    onScroll(event){
+        this.deSelect(this.itemElements[this.selectedItem]);
+        this.selectedItem += (event.deltaY/100);
+        this.selectedItem = mod(this.selectedItem,this.hotBarSize);
+        this.select(this.itemElements[this.selectedItem]);
+    }
+    select(element){
+        element.classList.add("item-selected");
+    }
+    deSelect(element){
+        element.classList.remove("item-selected");
     }
 }
 

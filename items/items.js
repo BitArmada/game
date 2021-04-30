@@ -2,7 +2,7 @@ class Item{
     constructor(){
         this.position = new Vector();
         this.asset = new Image();
-        this.size = new Vector(50, 50);
+        this.size = new Vector(25, 25);
     }
     draw(){
         drawImage(this.asset, this.position, this.size);
