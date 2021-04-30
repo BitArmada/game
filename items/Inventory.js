@@ -1,4 +1,5 @@
-import {ball, rock} from "./items.js";
+import {ball, rock, stick} from "./items.js";
+
 class Inventory{
     constructor(){
         this.items = [];
@@ -18,6 +19,7 @@ class Inventory{
 
         this.add(new ball());
         this.add(new rock());
+        this.add(new stick());
     }
     add(item){
         var newItemIndex = this.items.length;
@@ -30,7 +32,7 @@ class Inventory{
     useSelectedItem(event){
         var item = this.getSelectedItem();
         if(item&&typeof item.use == 'function'){
-            item.use();
+            item.use(event);
         }
     }
     create(){

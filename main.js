@@ -24,10 +24,10 @@ class Game{
     constructor(){
         this.running = true;
         this.fps = 60;
-        this.player = new Player(0,0);
+        this.Entitys = [];
+        this.player = new Player(0,0, this);
         this.tilemap = new Tilemap(this.player);
         tilemap = this.tilemap;
-        this.Entitys = [];
         this.start();
         this.time = 0;
     }
@@ -40,7 +40,7 @@ class Game{
         deltaTime = Date.now()-this.time;
         deltaTime/=1000;
         performance = 1/deltaTime;
-        this.displayPerfromance();
+        //this.displayPerfromance();
         this.time = Date.now();
         ctx.fillStyle = "black";
         ctx.fillRect(0,0,canv.width,canv.height);
@@ -58,11 +58,13 @@ class Game{
         //this.Entitys.push(new testEntity(pos.x, pos.y))
         this.player.onClick(event.clientX, event.clientY, event);
     }
+    add(ent){
+        this.Entitys.push(ent);
+    }
     displayPerfromance(){
         disp.innerHTML = "fps: "+performance
         +"\nworld seed: "+currentSeed
         +"\ncurrentChunk: "+Math.floor(this.player.position.x/(64))+", "+Math.floor(this.player.position.y/(64));
     }
 }
-
-var game_instance = new Game();
+window.game_instance = new Game();

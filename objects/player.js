@@ -1,6 +1,5 @@
 var ctx = canv.getContext('2d');
 import {Inventory} from "../items/Inventory.js";
-import {ball, rock} from "../items/items.js";
 
 class Player{
     constructor(x, y){
