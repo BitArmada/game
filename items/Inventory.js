@@ -9,6 +9,9 @@ class Inventory{
         this.inventorySize = 5; //size of inventory
         this.hotbarElement = document.getElementById('hotbar');
         this.inventoryElement = document.getElementById('inventory');
+        this.descriptionElement = document.getElementById("description");
+        this.itemNameElement = document.getElementById('item-name');
+        this.itemSummaryElement = document.getElementById('item-summary');
         this.create();
 
         //select defualt item
@@ -48,7 +51,25 @@ class Inventory{
         var item = document.createElement("DIV");
         item.classList.add("item");
         item.addEventListener("click", this.itemClick.bind(this));
+        item.addEventListener("mousemove", this.mousemove.bind(this));
+        item.addEventListener("mouseleave", this.mouseleave.bind(this));
         return item;
+    }
+    mouseleave(){
+        this.descriptionElement.classList.remove("description--active");
+    }
+    mousemove(event){
+        var elem = event.path[0];
+        var item = this.items[this.itemElements.indexOf(elem)];
+        if(!item){return}
+        this.descriptionElement.classList.add("description--active");
+        this.descriptionElement.style.top = event.clientY + "px";
+        this.descriptionElement.style.left = event.clientX + "px";
+
+        if(item.description && item.name){
+            this.itemNameElement.innerHTML = item.name;
+            this.itemSummaryElement.innerHTML = item.description;
+        }
     }
     itemClick(event){
         var elem = event.path[0];

@@ -91,6 +91,19 @@ function drawImage(asset, position, size, p, s){
       ctx.drawImage(asset, this.screenCords.x-(size.x/2), this.screenCords.y-(size.y/2), size.x, size.y);
   }
 }
+function drawImageRotated(asset, position, size, rot, p, s){
+  setPixeleated();
+  this.screenCords = tilemap.toScreenSpace(position.x, position.y);
+  ctx.save();
+  ctx.translate(this.screenCords.x, this.screenCords.y);
+  ctx.rotate(rot*Math.PI/180);
+  if(s||p){
+      ctx.drawImage(asset, p.x, p.y, s.x, s.y, -(size.x/2), -(size.y/2), size.x, size.y);
+  }else{
+      ctx.drawImage(asset, -(size.x/2), -(size.y/2), size.x, size.y);
+  }
+  ctx.restore();
+}
 function fillRect(position, size, color){
   this.screenCords = tilemap.toScreenSpace(position.x, position.y);
   ctx.fillStyle = color;

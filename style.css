@@ -1,6 +1,7 @@
 body{
     margin: 0;
     overflow: hidden;
+    cursor: url("./assets/other/cursor.png"), auto;
     image-rendering: auto;
     image-rendering: crisp-edges;
     image-rendering: pixelated;
@@ -75,6 +76,8 @@ body{
     z-index: 10;
     pointer-events: none;
 
+    font-family: 'Press Start 2P', cursive;
+
     background-color: #202124;
     border-radius: 5px;
     border: 3px ridge #0f7eee;
@@ -84,4 +87,11 @@ body{
 }
 .description--active {
     display: block;
+}
+#item-name {
+    font-size: 12px;
+    color: rgb(0, 255, 76);
+}
+#item-summary {
+    color: rgb(197, 235, 240);
 }

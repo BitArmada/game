@@ -1,16 +1,18 @@
 import {placeableItem} from "./templates/placeableItem.js";
 //import {particleShot} from "./templates/particleShot.js";
 import {Item} from "./item.js";
-import { Player } from "../objects/player.js";
+import {Spider} from "../enemys/Spider.js";
 
 class ball extends Item{
     constructor(){
         super();
         this.asset.src = "./assets/items/ball.png";
+        this.description = "it is told an orb like this one can only be created by a dragon.";
+        this.name = "magical orb";
     }
     use(event){
-        //var pos = tilemap.toWorldSpace(event.clientX, event.clientY);
-        //game_instance.add(new particleShot(pos.x, pos.y, "./assets/items/ball.png"));
+        var pos = tilemap.toWorldSpace(event.clientX, event.clientY);
+        game_instance.add(new Spider(pos.x, pos.y));
     }
 }
 
@@ -33,7 +35,7 @@ class bullet extends Entity{
         this.dir.add(this.spredVec);
 
         this.velocity = this.dir.normalize();
-        this.size = new Vector(5,25);
+        this.size = new Vector(4,25);
     }
     start(){
     }
@@ -58,6 +60,8 @@ class Pistol extends Item{
     constructor(){
         super();
         this.asset.src = "./assets/items/pistol.png";
+        this.name = "flintlock pistol";
+        this.description = "shoots bullets";
     }
     use(event){
         var pos = tilemap.toWorldSpace(event.clientX, event.clientY);
@@ -71,6 +75,8 @@ class rock extends Item{
     constructor(){
         super();
         this.asset.src = "./assets/items/rock.png";
+        this.name = "rock";
+        this.description = "hard as a...";
     }
     use(event){
         var pos = tilemap.toWorldSpace(event.clientX, event.clientY);
@@ -81,6 +87,8 @@ class stick extends Item{
     constructor(){
         super();
         this.asset.src = "./assets/items/stick.png";
+        this.name = "stick";
+        this.description = "pointy and brittle";
         //game.add(new testEntity(0,0));
     }
 }
