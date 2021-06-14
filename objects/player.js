@@ -17,51 +17,103 @@ class Player{
     }
     start(){}
     update(){
-        if(up){
-            this.velocity.y -= this.acceleration*deltaTime;
-            if(this.velocity.y < -this.maxSpeed){
-                this.velocity.y = -this.maxSpeed;
-            }
-        }else if(down){
-            this.velocity.y += this.acceleration*deltaTime;
-            if(this.velocity.y > this.maxSpeed){
-                this.velocity.y = this.maxSpeed;
-            }
-        }else{
-            if(this.velocity.y < 0){
+        //check if a gampad exists and if so then dont do normal wasd controlls
+        if(gamepads.length == 0){
+            //vertical
+            if(up){
+                this.velocity.y -= this.acceleration*deltaTime;
+                if(this.velocity.y < -this.maxSpeed){
+                    this.velocity.y = -this.maxSpeed;
+                }
+            }else if(down){
                 this.velocity.y += this.acceleration*deltaTime;
-                if(this.velocity.y >= 0){
-                    this.velocity.y = 0;
+                if(this.velocity.y > this.maxSpeed){
+                    this.velocity.y = this.maxSpeed;
                 }
             }else{
-                this.velocity.y -= this.acceleration*deltaTime;
-                if(this.velocity.y <= 0){
-                    this.velocity.y = 0;
+                if(this.velocity.y < 0){
+                    this.velocity.y += this.acceleration*deltaTime;
+                    if(this.velocity.y >= 0){
+                        this.velocity.y = 0;
+                    }
+                }else{
+                    this.velocity.y -= this.acceleration*deltaTime;
+                    if(this.velocity.y <= 0){
+                        this.velocity.y = 0;
+                    }
                 }
             }
-        }
-        if(left){
-            this.velocity.x -= this.acceleration*deltaTime;
-            if(this.velocity.x < -this.maxSpeed){
-                this.velocity.x = -this.maxSpeed;
+            //horizontal
+            if(left){
+                this.velocity.x -= this.acceleration*deltaTime;
+                if(this.velocity.x < -this.maxSpeed){
+                    this.velocity.x = -this.maxSpeed;
+                }
+                this.dir = -1;
+            }else if(right){
+                this.velocity.x += this.acceleration*deltaTime;
+                if(this.velocity.x > this.maxSpeed){
+                    this.velocity.x = this.maxSpeed;
+                }
+                this.dir = 1;
+            }else{
+                if(this.velocity.x < 0){
+                    this.velocity.x += this.acceleration*deltaTime;
+                    if(this.velocity.x >= 0){
+                        this.velocity.x = 0;
+                    }
+                }else{
+                    this.velocity.x -= this.acceleration*deltaTime;
+                    if(this.velocity.x <= 0){
+                        this.velocity.x = 0;
+                    }
+                }
             }
-            this.dir = -1;
-        }else if(right){
-            this.velocity.x += this.acceleration*deltaTime;
+        }else{
+            //gamepad is connected
+            this.scangamepads();
+            var horizontal = gamepads[0].axes[0];
+            var vertical = gamepads[0].axes[1];
+            this.velocity.x += this.acceleration*deltaTime*horizontal;
+            this.velocity.y += this.acceleration*deltaTime*vertical;
+
+            //dont allow to go over maxSpeed
             if(this.velocity.x > this.maxSpeed){
                 this.velocity.x = this.maxSpeed;
+            }else if(this.velocity.x < -this.maxSpeed){
+                this.velocity.x = -this.maxSpeed;
             }
-            this.dir = 1;
-        }else{
-            if(this.velocity.x < 0){
-                this.velocity.x += this.acceleration*deltaTime;
-                if(this.velocity.x >= 0){
-                    this.velocity.x = 0;
+            if(this.velocity.y > this.maxSpeed){
+                this.velocity.y = this.maxSpeed;
+            }else if(this.velocity.y < -this.maxSpeed){
+                this.velocity.y = -this.maxSpeed;
+            }
+
+            //if input close to 0 start slowing down
+            if(Math.round(horizontal * 10)/10 == 0){
+                if(this.velocity.x < 0){
+                    this.velocity.x += this.acceleration*deltaTime;
+                    if(this.velocity.x >= 0){
+                        this.velocity.x = 0;
+                    }
+                }else{
+                    this.velocity.x -= this.acceleration*deltaTime;
+                    if(this.velocity.x <= 0){
+                        this.velocity.x = 0;
+                    }
                 }
-            }else{
-                this.velocity.x -= this.acceleration*deltaTime;
-                if(this.velocity.x <= 0){
-                    this.velocity.x = 0;
+            }
+            if(Math.round(vertical * 10)/10 == 0){
+                if(this.velocity.y < 0){
+                    this.velocity.y += this.acceleration*deltaTime;
+                    if(this.velocity.y >= 0){
+                        this.velocity.y = 0;
+                    }
+                }else{
+                    this.velocity.y -= this.acceleration*deltaTime;
+                    if(this.velocity.y <= 0){
+                        this.velocity.y = 0;
+                    }
                 }
             }
         }
@@ -88,6 +140,17 @@ class Player{
             ctx.drawImage(item.asset, this.screenCords.x-(item.size.x/2)-(this.size.x/9), this.screenCords.y-(item.size.y/2)+(this.size.y/10), item.size.x, item.size.y);
         }
     }
+    scangamepads() {
+        var gps = navigator.getGamepads ? navigator.getGamepads() : (navigator.webkitGetGamepads ? navigator.webkitGetGamepads() : []);
+        for (var i = 0; i < gps.length; i++) {
+          if (gps[i]) {
+            if (gps[i].index in gamepads) {
+              gamepads[gps[i].index] = gps[i];
+            } else {
+            }
+          }
+        }
+      }
 }
 
 export {Player};

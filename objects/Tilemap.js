@@ -54,7 +54,7 @@ class Tilemap{
                 }
                 if(tile.id != -1){
                     //ctx.drawImage(tile.asset, (x*this.tilewidth)-this.tileoffx, (y*this.tilewidth)-this.tileoffy, this.tilewidth, this.tilewidth);
-                    tile.render((x*this.tilewidth)-this.tileoffx, (y*this.tilewidth)-this.tileoffy, this.tilewidth, this.tilewidth);
+                    tile.render(Math.round((x*this.tilewidth)-this.tileoffx), Math.round((y*this.tilewidth)-this.tileoffy), this.tilewidth, this.tilewidth);
                 }
             }
         }
@@ -162,23 +162,23 @@ class Chunk {
 function ToTile(height, biome){
     if(biome>1.5&&biome<biomerarity){
         if(height>1.5){
-            return new Tile(Tiles.cardinal,1);
+            return new BasicTile(Tiles.cardinal,1);
         }else if(height>0.8){
-            return new Tile(Tiles.testTile,1);
+            return new BasicTile(Tiles.testTile,1);
         }else{
-            return new Tile(Tiles.lava,2);
+            return new BasicTile(Tiles.lava,2);
         }
     }else if(biome>biomerarity){
         if(height>0.8){
-            return new Tile(Tiles.snow,1);
+            return new BasicTile(Tiles.snow,1);
         }else{
-            return new Tile(Tiles.ice,1);
+            return new BasicTile(Tiles.ice,1);
         }
     }else{
         if(height>0.8){
-            return new Tile(Tiles.grass,1);
+            return new grass();
         }else{
-            return new Tile(Tiles.water,2);
+            return new BasicTile(Tiles.water,2);
         }
     }
 }
@@ -199,26 +199,6 @@ function oceanGen(sx, sy, depthx, depthy){
 function heightGen(x, y){
     return (noise.perlin2(x / 10,y / 10))+1;
 }
-class Tile{
-    constructor(asset, id){
-        this.id = id;
-        this.form = new Vector();
-        this.asset = asset;
-    }
-    render(x, y, width, height){
-        ctx.drawImage(this.asset, (this.form.x)*16, (this.form.y)*16, 16,16, x, y, width, height);
-    }
-    tileUpdate(x, y, tiles){
-        if(tiles[y+1][x].id == 2){
-            this.form.x = 1;
-            this.form.y = 1;
-            if(x>0&&tiles[y][x-1].id == 2){
-                this.form.x = 0;
-                this.form.y = 1;
-            }
-        }
-    }
-}
 function round(val){
     if(val < 0){
         return Math.ceil(val);
@@ -226,4 +206,4 @@ function round(val){
         return Math.floor(val);
     }
 }
-export {Tilemap, Tile};
+export {Tilemap};

@@ -22,3 +22,41 @@ Tiles.lava.src = "assets/Tiles/lava.png";
 Tiles.cardinal.src = "assets/Tiles/cardinalstone.png";
 Tiles.cardinalGrass.src = "assets/Tiles/cardinal grass.png";
 Tiles.testTile.src = "assets/Tiles/cardinal.png";
+
+//var tiles = new Map();
+
+class BasicTile{
+    constructor(asset, id){
+        this.id = id;
+        this.form = new Vector();
+        this.asset = asset;
+    }
+    render(x, y, width, height){
+        ctx.drawImage(this.asset, (this.form.x)*16, (this.form.y)*16, 16,16, x, y, width, height);
+    }
+    tileUpdate(x, y, tiles){
+    }
+}
+class Tile{
+    constructor(){
+        this.id = 1;
+        this.asset;
+    }
+    render(x, y, width, height){
+        ctx.drawImage(this.asset, x, y, width, height);
+    }
+    tileUpdate(x, y, tiles){
+    }
+}
+
+class grass extends Tile{
+    constructor(){
+        super();
+        this.asset = Tiles.grass;
+    }
+    render(x, y, width, height){
+        ctx.drawImage(this.asset, 0, 0, 16, 16, x, y, width, height);
+    }
+    tileUpdate(x, y, tiles){
+    }
+}
