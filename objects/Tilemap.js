@@ -1,3 +1,4 @@
+import {ball, rock, stick, Pistol, Stone, Stone_Axe, Block} from "../items/items.js";
 var ctx = canv.getContext('2d');
 var biomerarity = 1.95;
 // width of world you wil reach ocean if you get to the end
@@ -13,7 +14,7 @@ class Tilemap{
         this.chunks = []//Array.from(Array(this.width), () => new Array(this.height));
         this.loadedChunks = [];
         this.chunkpos = new Vector(-100,-100);
-        this.tilewidth = 50;
+        this.tilewidth = 32;
         this.tileoffx = 0;
         this.tileoffy = 0;
         this.offsetX = 0;
@@ -107,6 +108,29 @@ class Tilemap{
     toWorldSpace(x, y){
         return {x: ((x/this.tilewidth)+this.offsetX), y: ((y/this.tilewidth)+this.offsetY)};
     }
+    getTile(x, y) //returns tile from loaded chunks
+    {
+        for(var i = 0; i < this.loadedChunks.length; i++){
+            var tile = this.loadedChunks[i].getTileWorld(x, y);
+            if(tile){
+                return tile;
+            }
+        }
+        return false;
+    }
+    setTile(x, y, tile){
+        var chunk = this.getChunk(Math.floor(x/chunkwidth)*chunkwidth, Math.floor(y/chunkwidth)*chunkwidth);
+        chunk.setTile(x-chunk.offset.x, y-chunk.offset.y, tile);
+    }
+    destroy(x, y){
+        // destroys a tile
+        var tile = this.getTile(x, y);
+        this.setTile(x, y, new dirt());
+        
+        var item = new Block(tile);
+        item.position = new Vector(x, y);
+        game_instance.add(item);
+    }
 }
 class Chunk {
     constructor(offx, offy){
@@ -154,9 +178,20 @@ class Chunk {
     }
     //world space
     getTile(x, y){
-        if(x<0||x>this.width-1){return '.';}
-        if(y<0||y>this.height-1){return '.';}
+        if(x<0||x>this.width-1){return false;}
+        if(y<0||y>this.height-1){return false;}
         return this.map[y][x];
+    }
+    //world space for world space positions as well
+    getTileWorld(xp, yp){
+        var x = xp-this.offset.x; 
+        var y = yp-this.offset.y;
+        if(x<0||x>this.width-1){return false;}
+        if(y<0||y>this.height-1){return false;}
+        return this.map[y][x];
+    }
+    setTile(x, y, tile){
+        this.map[y][x] = tile;
     }
 }
 function ToTile(height, biome){
@@ -166,7 +201,7 @@ function ToTile(height, biome){
         }else if(height>0.8){
             return new BasicTile(Tiles.testTile,1);
         }else{
-            return new BasicTile(Tiles.lava,2);
+            return new Lava();
         }
     }else if(biome>biomerarity){
         if(height>0.8){
@@ -186,6 +221,9 @@ function biomeGen(x, y){
     var scale = 50;
     return (noise.voronoi((x / scale)+noise.perlin2(x/scale, y/scale)/2, (y / scale)+noise.simplex2(x/scale, y/scale)/2))+1;
 }
+function generateTemple(){
+    tilemap.setTile(1,100,Tiles.stone);
+}
 function oceanGen(sx, sy, depthx, depthy){
     var scale = 5;
     var x = sx+noise.perlin2(sx/scale, sy/scale)*5;
@@ -197,7 +235,7 @@ function oceanGen(sx, sy, depthx, depthy){
     return false;
 }
 function heightGen(x, y){
-    return (noise.perlin2(x / 10,y / 10))+1;
+    return (noise.perlin2(x / 20,y / 20))+1;
 }
 function round(val){
     if(val < 0){

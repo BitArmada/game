@@ -17,6 +17,32 @@ class Player{
     }
     start(){}
     update(){
+        this.calculateMovments();
+        this.checkCollision();
+        this.position.x+=this.velocity.x;
+        this.position.y+=this.velocity.y;
+        setPixeleated();
+        this.screenCords = tilemap.toScreenSpace(this.position.x, this.position.y);
+        if(this.dir>0){
+            ctx.save();
+            ctx.scale(-1, 1);
+            ctx.drawImage(this.asset, -(this.screenCords.x-(this.size.x/2)), (this.screenCords.y-(this.size.y/2)), this.size.x*-1, this.size.y);
+            ctx.restore();
+        }else{
+            ctx.drawImage(this.asset, this.screenCords.x-(this.size.x/2), this.screenCords.y-(this.size.y/2), this.size.x, this.size.y);
+        }
+        this.drawItem();
+    }
+    onClick(x, y, event) {
+        this.Inventory.useSelectedItem(event);
+    }
+    drawItem(){
+        var item = this.Inventory.getSelectedItem();
+        if(item){
+            ctx.drawImage(item.asset, this.screenCords.x-(item.size.x/2)-(this.size.x/9), this.screenCords.y-(item.size.y/2)+(this.size.y/10), item.size.x, item.size.y);
+        }
+    }
+    calculateMovments(){
         //check if a gampad exists and if so then dont do normal wasd controlls
         if(gamepads.length == 0){
             //vertical
@@ -117,28 +143,6 @@ class Player{
                 }
             }
         }
-        this.position.x+=this.velocity.x;
-        this.position.y+=this.velocity.y;
-        setPixeleated();
-        this.screenCords = tilemap.toScreenSpace(this.position.x, this.position.y);
-        if(this.dir>0){
-            ctx.save();
-            ctx.scale(-1, 1);
-            ctx.drawImage(this.asset, -(this.screenCords.x-(this.size.x/2)), (this.screenCords.y-(this.size.y/2)), this.size.x*-1, this.size.y);
-            ctx.restore();
-        }else{
-            ctx.drawImage(this.asset, this.screenCords.x-(this.size.x/2), this.screenCords.y-(this.size.y/2), this.size.x, this.size.y);
-        }
-        this.drawItem();
-    }
-    onClick(x, y, event) {
-        this.Inventory.useSelectedItem(event);
-    }
-    drawItem(){
-        var item = this.Inventory.getSelectedItem();
-        if(item){
-            ctx.drawImage(item.asset, this.screenCords.x-(item.size.x/2)-(this.size.x/9), this.screenCords.y-(item.size.y/2)+(this.size.y/10), item.size.x, item.size.y);
-        }
     }
     scangamepads() {
         var gps = navigator.getGamepads ? navigator.getGamepads() : (navigator.webkitGetGamepads ? navigator.webkitGetGamepads() : []);
@@ -150,7 +154,27 @@ class Player{
             }
           }
         }
-      }
+    }
+    checkCollision(){
+        var nPosition = new Vector(); // the next position of the player
+
+        nPosition.x = this.position.x+this.velocity.x; 
+        nPosition.y = this.position.y+this.velocity.y; // set next position to the current position + velocity
+
+        var collision_tile = tilemap.getTile(Math.floor(this.position.x), Math.floor(this.position.y)); // the tile the player will be on
+        collision_tile.onCollision(); // trigger collision event for tile instance
+
+        if(this.velocity.x >= 0 || this.velocity.x < 0){
+            if(tilemap.getTile(Math.floor(nPosition.x), Math.floor(this.position.y)).collidable){
+                this.velocity.x = 0;
+            }
+        }
+        if(this.velocity.y >= 0 || this.velocity.y < 0){
+            if(tilemap.getTile(Math.floor(this.position.x), Math.floor(nPosition.y)).collidable){
+                this.velocity.y = 0;
+            }
+        }
+    }
 }
 
 export {Player};

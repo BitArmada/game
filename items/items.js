@@ -92,6 +92,50 @@ class stick extends Item{
         //game.add(new testEntity(0,0));
     }
 }
+class Stone extends Item{
+    constructor(){
+        super();
+        this.asset.src = "./assets/items/rock.png";
+        this.name = "stone";
+        this.description = "can be placed";
+    }
+    use(event){
+        var pos = getClickedTile(event);
+        tilemap.setTile(pos.x, pos.y,new stone());
+    }
+}
+class Stone_Axe extends Item{
+    constructor(){
+        super();
+        this.asset.src = "./assets/items/stone axe.png";
+        this.name = "Stone Axe";
+        this.description = "can be used to harvest wood";
+    }
+    use(event){
+        var pos = getClickedTile(event);
+        var tile = tilemap.getTile(pos.x, pos.y);
+        if(tile.name == "stone"){
+            tilemap.destroy(pos.x, pos.y);
+        }
+    }
+}
 
+//turns tile into item
+class Block extends Item{
+    constructor(tile){
+        super();
+        this.asset = tile.asset;
+        this.name = tile.name;
+        this.type = tile.constructor;
+        this.description = "can be placed";
+        this.reusable = false; // item will be removed after it is used
+    }
+    use(event){
+        var pos = getClickedTile(event);
+        if(tilemap.getTile(pos.x, pos.y).constructor !== this.type){
+            tilemap.setTile(pos.x, pos.y,new this.type());
+        }else{this.quantity++;}
+    }
+}
 
-export {ball, rock, stick, Pistol, bullet};
+export {ball, rock, stick, Pistol, bullet, Stone, Stone_Axe, Block};

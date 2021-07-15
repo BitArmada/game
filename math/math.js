@@ -124,7 +124,14 @@ function vecToRot(vec){
 function mod(num, n) {
   return ((num%n)+n)%n;
 };
-
+function worldPixelToTile(vec){ // converts world space cordinates in pixels to world space cordinates in tiles
+  return new Vector(Math.floor(vec.x/tilemap.tilewidth), Math.floor(vec.y/tilemap.tilewidth));
+}
+function getClickedTile(event){
+  /** returns tile position that the mouse is over */
+  var pos = tilemap.toWorldSpace(event.clientX, event.clientY);
+  return new Vector(Math.floor(pos.x), Math.floor(pos.y));
+}
 /**
  *  ctx.save();
   ctx.translate((player.x-(offsetX*tilewidth) ), player.y-(offsetY*tilewidth));
