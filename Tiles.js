@@ -15,6 +15,7 @@ var Tiles = {
     dirt: new Image(),
     temple_sheet: new Image(),
 }
+//load images
 Tiles.grass.src = "assets/Tiles/grass.png";
 Tiles.water.src = "assets/Tiles/Watermine.png";
 Tiles.sand.src = "assets/Tiles/Sand.png";
